@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero fade-in">
+    <div class="container">
+        <h1>Simulasi Monte Carlo Prediksi Penjualan Bulanan</h1>
+        <p>Menganalisis data penjualan historis untuk memprediksi pendapatan di masa depan dengan ribuan skenario simulasi.</p>
+        <a href="#dashboard" class="hero-button">Jelajahi Hasil Simulasi</a>
+    </div>
+</div>
+
+<div id="dashboard" class="content-section">
+    <div class="container">
+        <h2 class="section-title">Ringkasan Hasil Simulasi</h2>
+        <div class="summary-grid">
+            <div class="summary-card fade-in">
+                <h3>📈 Prediksi Rata-rata</h3>
+                <div class="value" id="pred-mean">{{ summary.pred_mean }}</div>
+            </div>
+            <div class="summary-card fade-in">
+                <h3>📊 Standar Deviasi</h3>
+                <div class="value" id="std-sim">{{ summary.std_sim }}</div>
+            </div>
+            <div class="summary-card fade-in">
+                <h3>📉 Minimum Simulasi</h3>
+                <div class="value" id="min-sim">{{ summary.min_sim }}</div>
+            </div>
+            <div class="summary-card fade-in">
+                <h3>🚀 Maksimum Simulasi</h3>
+                <div class="value" id="max-sim">{{ summary.max_sim }}</div>
+            </div>
+            <div class="summary-card fade-in">
+                <h3>🔢 Jumlah Simulasi</h3>
+                <div class="value">{{ summary.n_sim }}</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Dashboard Visualisasi</h2>
+        <div class="main-grid">
+            <div class="viz-card fade-in">
+                <h4>Penjualan Bulanan Historis</h4>
+                <img src="{{ url_for('static', filename='grafik historis.png') }}" alt="Grafik historis">
+                <p class="caption">Visualisasi data penjualan asli per bulan untuk melihat tren dan musiman.</p>
+            </div>
+            <div class="viz-card fade-in">
+                <h4>Distribusi Hasil Simulasi</h4>
+                <img src="{{ url_for('static', filename='Distribusi hasil.png') }}" alt="Distribusi hasil">
+                <p class="caption">Sebaran hasil prediksi dari ribuan simulasi, menunjukkan kemungkinan hasil.</p>
+            </div>
+            <div class="viz-card fade-in">
+                <h4>Historis vs Prediksi</h4>
+                <img src="{{ url_for('static', filename='historis vs prediksi.png') }}" alt="Historis vs Prediksi">
+                <p class="caption">Perbandingan penjualan aktual dengan rentang hasil prediksi dari simulasi.</p>
+            </div>
+            <div class="viz-card fade-in">
+                <h4>Tabel Probabilitas</h4>
+                <img src="{{ url_for('static', filename='prob_table.png') }}" alt="Tabel probabilitas">
+                <p class="caption">Tabel yang menunjukkan peluang penjualan mencapai interval target tertentu.</p>
+            </div>
+            <div class="viz-card fade-in">
+                <h4>Tabel Interval</h4>
+                <img src="{{ url_for('static', filename='interval_table.png') }}" alt="Tabel interval">
+                <p class="caption">Interval hasil simulasi beserta peluang kumulatifnya untuk analisis risiko.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const ids = ["pred-mean", "std-sim", "min-sim", "max-sim"];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.textContent.trim() !== "") {
+            const num = parseFloat(el.textContent);
+            el.textContent = num.toLocaleString("id-ID", { 
+                style: 'currency', 
+                currency: 'IDR', 
+                maximumFractionDigits: 0 
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
